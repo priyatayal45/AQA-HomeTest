@@ -12,8 +12,6 @@ public class DriverManager {
 
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    private static final String MOBILE_DEVICE = "Samsung Galaxy S20 Ultra";
-
     private DriverManager() {
     }
 

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class BaseTest {
+public class UIBaseTest {
 
 	protected final Logger log = Logging.get(getClass());
 

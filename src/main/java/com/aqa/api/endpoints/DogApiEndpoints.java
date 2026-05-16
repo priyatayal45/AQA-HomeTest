@@ -1,4 +1,4 @@
-package com.aqa.api;
+package com.aqa.api.endpoints;
 
 public class DogApiEndpoints {
 

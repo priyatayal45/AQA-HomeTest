@@ -1,8 +1,9 @@
 package com.aqa.api;
 
-import com.aqa.api.ApiBaseTest;
-import com.aqa.api.DogApiEndpoints;
-import com.aqa.api.JsonPlaceholderEndpoints;
+import com.aqa.api.endpoints.DogApiEndpoints;
+import com.aqa.api.endpoints.JsonPlaceholderAPIEndpoints;
+import com.aqa.api.model.request.JsonPlaceHolderPostRequest;
+import com.aqa.base.ApiBaseTest;
 import com.aqa.utils.ApiUtils;
 
 import io.restassured.RestAssured;
@@ -78,12 +79,9 @@ public class ApiTest extends ApiBaseTest {
         RestAssured.baseURI = JSON_BASE_URL;
         log.info("TC05 - POST create new post");
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("title", "AQA Test Post");
-        body.put("body", "This is a test post body");
-        body.put("userId", 1);
+        JsonPlaceHolderPostRequest postRequest = new JsonPlaceHolderPostRequest("AQA Test Post", "This is a test post body", 1);
 
-        Response response = ApiUtils.post(JSON_BASE_URL,JsonPlaceholderEndpoints.POSTS, body);
+        Response response = ApiUtils.post(JSON_BASE_URL,JsonPlaceholderAPIEndpoints.POSTS, postRequest);
         assertThat(response.statusCode(), equalTo(201));
         assertThat(response.jsonPath().getString("title"), equalTo("AQA Test Post"));
         assertThat(response.jsonPath().getString("body"), equalTo("This is a test post body"));
@@ -92,13 +90,12 @@ public class ApiTest extends ApiBaseTest {
         log.info("TC05 passed — post created with id: {}", response.jsonPath().getInt("id"));
     }
 
-    // TC06: Delete a post (DELETE)
     @Test(description = "TC06 - Delete a post returns 200 with empty body")
     public void testDeletePost() {
         RestAssured.baseURI = JSON_BASE_URL;
         log.info("TC06 - DELETE post with id 1");
 
-        Response response = ApiUtils.deleteWithParam(JSON_BASE_URL,JsonPlaceholderEndpoints.POST_BY_ID, "id", 1);
+        Response response = ApiUtils.deleteWithParam(JSON_BASE_URL,JsonPlaceholderAPIEndpoints.POST_BY_ID, "id", 1);
         assertThat(response.statusCode(), equalTo(200));
         assertThat(response.getBody().asString(), containsString("{}"));
         log.info("TC06 passed — post deleted successfully");

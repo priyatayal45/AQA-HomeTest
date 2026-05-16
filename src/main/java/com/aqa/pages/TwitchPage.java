@@ -1,5 +1,6 @@
 package com.aqa.pages;
 
+import com.aqa.utils.ConfigReader;
 import com.aqa.utils.DriverManager;
 import com.aqa.utils.ScreenshotUtil;
 import com.aqa.utils.WaitUtil;
@@ -14,24 +15,19 @@ import java.util.List;
 
 public class TwitchPage extends BasePage {
 
-    private final By cookieBanner     = By.cssSelector("[data-a-target='consent-banner-accept']");
     private final By searchButton     = By.xpath("//div[text()='Browse']");
     private final By searchInput      = By.cssSelector("input[type='search']");
     private final By firstStreamer    = By.xpath("(//section/div/button)[1]");
     private final By modalRoot        = By.cssSelector("[data-a-target='modal-root']");
     private final By bodyTag          = By.tagName("body");
     private final By streamerResults  = By.xpath("//section/div/button");
-    private final By videoPlayer      = By.cssSelector("video");
+    private final By videoPlayer      = By.cssSelector("video[aria-label='Twitch video player']");
     private final By followButton     = By.cssSelector("[data-a-target='follow-button']");
     private final By iframePlayer     = By.cssSelector("iframe");
-    private final By channelHeader    = By.cssSelector("[class*='channel-header']");
     private final By ageGateButton    = By.cssSelector("[data-a-target='player-overlay-mature-accept']");
-    private final By startWatchingBtn = By.xpath("//*[text()='Start Watching']");
-    private final By acceptBtn        = By.xpath("//*[text()='Accept']");
-    private final By closeBtn         = By.cssSelector("[aria-label='Close']");
-    private final By closeTargetBtn   = By.cssSelector("[data-a-target='close-button']");
 
-    private static final String TWITCH_URL = "https://www.twitch.tv";
+
+    private static final String TWITCH_URL = ConfigReader.get("twitch.base.url");
 
     public TwitchPage open() {
         driver.get(TWITCH_URL);
@@ -85,7 +81,7 @@ public class TwitchPage extends BasePage {
             driver.findElement(searchInput).sendKeys(Keys.ESCAPE);
             WaitUtil.waitForInvisible(driver, searchInput, 5);
         } catch (Exception e) {
-        	log.error("Search input not found to close");
+        	log.info("Search input not found to close");
         }
 
         try {
@@ -99,21 +95,12 @@ public class TwitchPage extends BasePage {
     }
 
     public TwitchPage handlePopupsAndModals() {
-        List<By> popups = Arrays.asList(
-            ageGateButton,
-            startWatchingBtn,
-            acceptBtn,
-            closeBtn,
-            closeTargetBtn
-        );
-
-        for (By locator : popups) {
-            if (isElementPresent(locator)) {
-                try {
-                    driver.findElement(locator).click();
-                    WaitUtil.waitForInvisible(driver, locator, 5);
-                } catch (Exception ignored) {}
-            }
+    	if (isElementPresent(ageGateButton)) {
+            driver.findElement(ageGateButton).click();
+            log.info("Age gate popup handled");
+            WaitUtil.waitForInvisible(driver, ageGateButton, 5);
+        } else {
+            log.info("No popup detected — page loaded directly");
         }
         return this;
     }
@@ -124,9 +111,8 @@ public class TwitchPage extends BasePage {
         List<By> indicators = Arrays.asList(
             videoPlayer,
             followButton,
-            iframePlayer,
-            channelHeader
-        );
+            iframePlayer
+            );
 
         for (By locator : indicators) {
             if (isElementPresent(locator)) {

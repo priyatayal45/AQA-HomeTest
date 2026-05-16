@@ -1,6 +1,6 @@
 package com.aqa.ui;
 
-import com.aqa.base.BaseTest;
+import com.aqa.base.UIBaseTest;
 import com.aqa.pages.TwitchPage;
 import com.aqa.utils.DriverManager;
 import com.aqa.utils.ScreenshotUtil;
@@ -18,10 +18,10 @@ import org.testng.annotations.Test;
  * 5. Select one streamer
  * 6. Wait until page loads and take screenshot
  */
-public class TwitchTest extends BaseTest {
+public class TwitchTest extends UIBaseTest {
 
 	@Test(description = "Search StarCraft II on Twitch and open a streamer page")
-	public void searchAndOpenStreamer() {
+	public void searchAndOpenStreamer() throws InterruptedException {
 
 	    TwitchPage twitchPage = new TwitchPage();
 

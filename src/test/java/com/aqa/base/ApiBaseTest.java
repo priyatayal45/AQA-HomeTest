@@ -1,4 +1,4 @@
-package com.aqa.api;
+package com.aqa.base;
 
 import com.aqa.utils.Logging;
 import io.restassured.RestAssured;
