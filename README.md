@@ -1,7 +1,8 @@
 # AQA Home Test — Java + Selenium + REST Assured
 
 ## Test Demo
-![Test Run](demo.gif)
+
+![Test Run](TestDemo.gif)
 
 ## Tech Stack
 
